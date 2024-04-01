@@ -9,7 +9,7 @@ const TimeRangeSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-  });
+});
 
 const SlotSchema = new mongoose.Schema({
     date: {

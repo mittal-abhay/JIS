@@ -8,7 +8,6 @@ const authenticateRole = (roles) => (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Authorization token is required' });
   }
-
   try {
     const decoded = jwt.verify(token, config.jwtSecret);
     if (!roles.includes(decoded.role)) {

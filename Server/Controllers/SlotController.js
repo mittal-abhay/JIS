@@ -1,4 +1,5 @@
 const Slot = require('../Models/Slot');
+const moment = require('moment');
 
 exports.getSlotsOnDate = async (req, res) => {
   try {
@@ -14,6 +15,54 @@ exports.getSlotsOnDate = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// API to retrieve the next 5 available slots
+
+
+exports.getNextAvailableSlots = async (req, res) => {
+  try {
+    // Get the current time and date
+    const currentTime = moment();
+    const currentDate = moment().format('YYYY-MM-DD');
+
+    // Find the next 10 available slots after the current time and date
+    const nextAvailableSlots = await Slot.find({
+      isEmpty: true,
+      $or: [
+        // Slots on the current date starting after the current time
+        {
+          date: currentDate,
+          'time.startTime': { $gte: currentTime.format('hh:mm A') }
+        },
+        // Slots on future dates
+        { date: { $gt: currentDate } }
+      ]
+    }).sort({ date: 1, 'time.startTime': 1 }).limit(10);
+
+    if (nextAvailableSlots.length === 0) {
+      return res.status(404).json({ message: 'No available slots found' });
+    }
+
+    // Manually sort the slots to ensure morning slots come before afternoon slots
+    nextAvailableSlots.sort((a, b) => {
+      // Compare dates first
+      if (a.date !== b.date) {
+        return a.date.localeCompare(b.date);
+      } else {
+        // If dates are the same, compare start times
+        const timeA = moment(a.time.startTime, 'hh:mm A');
+        const timeB = moment(b.time.startTime, 'hh:mm A');
+        return timeA.diff(timeB);
+      }
+    });
+
+    res.status(200).json(nextAvailableSlots);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 
 
 exports.getSlotsBetweenDates = async (req, res) => {

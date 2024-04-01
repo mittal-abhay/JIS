@@ -1,16 +1,6 @@
 // courtCase.js
 const mongoose = require('mongoose');
 
-const TimeRangeSchema = new mongoose.Schema({
-  startTime: {
-      type: String,
-      required: true
-  },
-  endTime: {
-      type: String,
-      required: true
-  }
-});
 const HearingSchema = new mongoose.Schema({
   date: {
     type: String,
@@ -21,8 +11,15 @@ const HearingSchema = new mongoose.Schema({
   summary: {
     type: String
   },
-  time: TimeRangeSchema
-});
+  startTime: {
+    type: String,
+    required: true
+  },
+  endTime: {
+    type: String,
+    required: true
+  }
+  });
 
 const AdjournmentSchema = new mongoose.Schema({
   date: {
@@ -31,10 +28,17 @@ const AdjournmentSchema = new mongoose.Schema({
   newHearingDate: {
     type: String,
   },
-  reason: {
+  summary: {
     type: String
   },
-  time: TimeRangeSchema
+  startTime: {
+    type: String,
+    required: true
+  },
+  endTime: {
+    type: String,
+    required: true
+  }
 });
 
 const TimelineSchema = new mongoose.Schema({
@@ -42,9 +46,13 @@ const TimelineSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  time: TimeRangeSchema,
-  slot_id: {
-    type: String
+  startTime: {    
+    type: String,
+    required: true
+  },
+  endTime: {
+    type: String,
+    required: true
   }
 });
 
@@ -104,10 +112,6 @@ const CourtCaseSchema = new mongoose.Schema({
     required: true
   },
   start_date: {
-    type: String,
-    required: true
-  },
-  expected_completion_date: {
     type: String,
     required: true
   },
