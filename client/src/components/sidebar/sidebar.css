@@ -55,6 +55,11 @@
     cursor: pointer;
 }
 
+.sidebar-item a{
+    text-decoration: none;
+    color: #eddfec;
+ }
+
 .sidebar-item-icon{
     color: #c5cad3;
     font-size: 1.4rem;
@@ -78,10 +83,14 @@
     height: auto;
     background-color: #8a5ff7;
  }
+
  .sidebar-subitem a{
     text-decoration: none;
     color: #eddfec;
  }
+
+
+
  .sidebar-subitem{
     height: 2.3rem;
     width: 100%;
@@ -93,7 +102,6 @@
     transition: 0.5s ease;
     cursor: pointer;
  }
-
 
  .sidebar-subitem:hover{
     background-color: #6838EC;

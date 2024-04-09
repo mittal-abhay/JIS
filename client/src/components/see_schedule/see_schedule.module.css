@@ -1,0 +1,61 @@
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+.heading {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #555960;
+}
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+}
+.btn{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #7E4EFC;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+  }
+  .btn:hover {
+    background-color: #6838EC;
+  }
+
+  .casesTableContainer {
+    margin-top: 20px;
+    max-height: 300px; /* Set a maximum height for the table container */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  .casesTable {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .casesTable th,
+  .casesTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .casesTable th {
+    background-color: #7E4EFC;
+    color: #fff;
+  }
+  
+  .casesTable th:first-child,
+  .casesTable td:first-child {
+    border-left: none;
+  }
+  
+  .casesTable th:last-child,
+  .casesTable td:last-child {
+    border-right: none;
+  }

@@ -19,7 +19,7 @@ exports.createCourtCase = async (req, res) => {
     if (!prosecutor) missingFields.push('prosecutor');
     if (!lawyer) missingFields.push('lawyer');
     if (!start_date) missingFields.push('start_date');
-    
+
     if(CIN.length > 3 || CIN.length < 3){
       return res.status(400).json({ message: 'Invalid CIN length' });
     }
@@ -246,7 +246,10 @@ exports.recordAdjournment = async (req, res) => {
         }else{
           return res.status(400).json({ message: 'No available slots found' });
         }
-
+        if(!summary){
+          return res.status(400).json({message: "Summary missing"});
+        }
+        
         const updatedCourtCase = await CourtCase.findOneAndUpdate(
             { CIN: cin},
             { 
@@ -298,6 +301,10 @@ exports.recordProceedings = async (req, res) => {
     }else{
           return res.status(400).json({ message: 'No available slots found' });
     }
+    if(!summary){
+      return res.status(400).json({message: "Summary missing"});
+    }
+
 
     const updatedCourtCase = await CourtCase.findOneAndUpdate(
         { CIN: cin },
@@ -324,6 +331,7 @@ exports.recordJudgment = async (req, res) => {
     try {
         const { summary } = req.body;
         const { cin } = req.params;
+        
         const courtCase = await CourtCase.findOne({CIN: cin});
         if (!courtCase) {
           return res.status(404).json({ message: 'Court case not found' });
@@ -332,9 +340,12 @@ exports.recordJudgment = async (req, res) => {
         if(courtCase.status === 'resolved'){  
           return res.status(400).json({ message: 'The case is already closed'});
         }
+        if(!summary){
+          return res.status(400).json({message: "Summary missing"});
+        }
         const updatedCourtCase = await CourtCase.findOneAndUpdate(
             { CIN: cin },
-            { $set: { judgment: { date: lastDate, summary }, status: 'resolved' }},
+            { $set: { judgment: { date: lastDate, summary: summary }, status: 'resolved' }},
             { new: true }
         );
         if (!updatedCourtCase) {
