@@ -5,7 +5,7 @@ import { FaCalendar } from "react-icons/fa";
 import { FaPenClip } from "react-icons/fa6";
 import { RiGroupFill } from "react-icons/ri";
 import { IoHome } from "react-icons/io5";
-
+import { Link } from 'react-router-dom';
 const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
  
   const [activeSubMenu, setActiveSubMenu] = useState(null);
@@ -21,7 +21,7 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
 
   return (
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
-      <div className = 'Logo'></div>
+      <div className = 'Logo'>LOGO</div>
       <div className="sidebar-content">
       <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
           <IoHome className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Dashboard</span>
@@ -40,9 +40,9 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
           <FaPenClip className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Record Something</span>
         </div>
         <div className={`sidebar-submenu ${activeSubMenu === 'Record Something'  && !IsClose? 'show' : ''}`}>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Adjournment')}>Record Adjournment</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Proceeding')}>Record Proceeding</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Judgement')}>Record Judgement</div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Adjournment')}><a href="/record">Record Adjournment</a></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Proceeding')}><a href="/record">Record Proceeding</a></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Judgement')}><a href="/record">Record Judgement</a></div>
         </div>
 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('See Schedule')}>

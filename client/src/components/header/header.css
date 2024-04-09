@@ -1,8 +1,9 @@
 .header-container{
     position: fixed;
+    top: 0;
     right: 0;
-    height: 4em;
     width: 80%;
+    height: 4em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,6 +34,32 @@
     background-size: cover;
     background-image: url('../../../src/assets/profile.png') ;
     cursor: pointer;
+}
+
+.profile-container{
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    z-index: 10;
+    height: 6rem;
+    background-color: white;
+    border: 1px solid #E9EDF3;
+    border-radius: 20px;
+    box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: -1rem;
+    padding-right: 1rem; 
+    padding-left: 1rem; 
+    font-size: 1rem;
+    color: #555960;
+    gap: 0.1rem;
+    width: max-content;
+    min-width: 180px;
+}
+.profile-show{
+   display: none;
 }
 
 .header-text{
