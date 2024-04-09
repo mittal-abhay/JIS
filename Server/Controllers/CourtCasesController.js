@@ -5,23 +5,56 @@ const Slot = require('../Models/Slot');
 
 exports.createCourtCase = async (req, res) => {
   try {
-    const { timeline } = req.body;
-    if (!timeline || timeline.length === 0) {
-      return res.status(400).json({ error: 'Timeline not found or empty' });
+    // Destructure required fields from req.body
+    const { CIN, defendant, crime, arrest, timeline, judge, prosecutor, lawyer, start_date} = req.body;
+    
+    // Check if any of the required fields are missing
+    const missingFields = [];
+    if (!CIN) missingFields.push('CIN');
+    if (!defendant || !defendant.name || !defendant.address) missingFields.push('defendant');
+    if (!crime || !crime.type || !crime.date_committed || !crime.location) missingFields.push('crime');
+    if (!arrest || !arrest.arresting_officer || !arrest.date) missingFields.push('arrest');
+    if (!timeline || timeline.length === 0) missingFields.push('timeline');
+    if (!judge) missingFields.push('judge');
+    if (!prosecutor) missingFields.push('prosecutor');
+    if (!lawyer) missingFields.push('lawyer');
+    if (!start_date) missingFields.push('start_date');
+    
+    if(CIN.length > 3 || CIN.length < 3){
+      return res.status(400).json({ message: 'Invalid CIN length' });
     }
-   
+    const existingCIN = await CourtCase.findOne({ CIN: CIN });
+    if (existingCIN) {
+      return res.status(400).json({ message: 'CIN already exists' });
+    }
+    // If any required fields are missing, return an error message
+    if (missingFields.length > 0) {
+      return res.status(400).json({ error: `Missing required field(s): ${missingFields.join(', ')}` });
+    }
+    
+    // Check if the timeline has all required fields
+    const missingTimelineFields = timeline.reduce((acc, curr, index) => {
+      if (!curr.date || !curr.startTime || !curr.endTime) acc.push(`timeline[${index}]`);
+      return acc;
+    }, []);
+
+    if (missingTimelineFields.length > 0) {
+      return res.status(400).json({ error: `Missing required field(s) in timeline: ${missingTimelineFields.join(', ')}` });
+    }
+
+    // Proceed with creating the court case
     const ondate = timeline[0].date;
     const start = timeline[0].startTime;
     const end = timeline[0].endTime;
 
-    const slot = await Slot.findOne({ date: ondate, 'time.startTime': start, 'time.endTime': end, isEmpty: true});
-      if (slot) {
-        const courtCase = await CourtCase.create(req.body);
-        slot.case_id = courtCase._id;
-        slot.isEmpty = false;
-        await slot.save();
-        return res.status(201).json({ courtCase });
-      }
+    const slot = await Slot.findOne({ date: ondate, 'time.startTime': start, 'time.endTime': end, isEmpty: true });
+    if (slot) {
+      const courtCase = await CourtCase.create(req.body);
+      slot.case_id = courtCase._id;
+      slot.isEmpty = false;
+      await slot.save();
+      return res.status(201).json({ courtCase });
+    }
 
     // If no empty slot is found, return an error message
     return res.status(400).json({ error: 'No available slots found' });
@@ -53,6 +86,24 @@ exports.getCourtCaseById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.getCaseByCIN = async (req, res) => {
+  try {
+    const { cin } = req.params;
+    
+    const caseDetails = await CourtCase.findOne({ CIN: cin });
+
+    if (!caseDetails) {
+      return res.status(404).json({ message: 'Case not found' });
+    }
+
+    res.status(200).json(caseDetails);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 // API to update a court case by ID
 exports.updateCourtCase = async (req, res) => {
@@ -173,7 +224,8 @@ exports.searchCourtCases = async (req, res) => {
 exports.recordAdjournment = async (req, res) => {
     try {
         const { newHearingDate, summary, startTime, endTime } = req.body;
-        const courtCase = await CourtCase.findById(req.params.id);
+        const { cin } = req.params;
+        const courtCase = await CourtCase.findOne({CIN: cin});
         if (!courtCase) {
           return res.status(404).json({ message: 'Court case not found' });
         }
@@ -196,7 +248,7 @@ exports.recordAdjournment = async (req, res) => {
         }
 
         const updatedCourtCase = await CourtCase.findOneAndUpdate(
-            { _id: req.params.id },
+            { CIN: cin},
             { 
               $push: {
                 'adjournments': { date: lastDate, newHearingDate: newHearingDate, summary: summary,startTime: startTime, endTime: endTime},
@@ -224,7 +276,8 @@ exports.recordAdjournment = async (req, res) => {
 exports.recordProceedings = async (req, res) => {
   try {
     const { newHearingDate, summary, startTime, endTime } = req.body;
-    const courtCase = await CourtCase.findById(req.params.id);
+    const { cin } = req.params;
+    const courtCase = await CourtCase.findOne({CIN: cin});
     if (!courtCase) {
       return res.status(404).json({ message: 'Court case not found' });
     }
@@ -247,7 +300,7 @@ exports.recordProceedings = async (req, res) => {
     }
 
     const updatedCourtCase = await CourtCase.findOneAndUpdate(
-        { _id: req.params.id },
+        { CIN: cin },
         { 
           $push: {
             'hearings': { date: lastDate, newHearingDate: newHearingDate, summary: summary,startTime: startTime, endTime: endTime},
@@ -256,12 +309,10 @@ exports.recordProceedings = async (req, res) => {
         },
         { new: true }
     );
-
     
     if (!updatedCourtCase) {
         return res.status(404).json({ message: 'Court case not found' });
     }
-
     res.status(200).json({ message: "Hearings recorded successfully", updatedCourtCase });
 } catch (err) {
     console.error('Error:', err);
@@ -272,14 +323,17 @@ exports.recordProceedings = async (req, res) => {
 exports.recordJudgment = async (req, res) => {
     try {
         const { summary } = req.body;
-        const courtCase = await CourtCase.findById(req.params.id);
+        const { cin } = req.params;
+        const courtCase = await CourtCase.findOne({CIN: cin});
         if (!courtCase) {
           return res.status(404).json({ message: 'Court case not found' });
         }
         const lastDate = courtCase.timeline[courtCase.timeline.length - 1].date;
-
+        if(courtCase.status === 'resolved'){  
+          return res.status(400).json({ message: 'The case is already closed'});
+        }
         const updatedCourtCase = await CourtCase.findOneAndUpdate(
-            { _id: req.params.id },
+            { CIN: cin },
             { $set: { judgment: { date: lastDate, summary }, status: 'resolved' }},
             { new: true }
         );

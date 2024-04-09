@@ -117,7 +117,7 @@ const CourtCaseSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: true
+    default: 'pending'
   },
   
   adjournments: [AdjournmentSchema],
