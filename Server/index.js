@@ -7,11 +7,17 @@ const slotRoutes = require('./Routes/SlotRoutes');
 const dotenv = require('dotenv');
 const app = express();
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 dotenv.config();
 
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  credentials: true // Allow credentials (e.g., cookies, authorization headers)
+}));
 
-mongoose.connect(process.env.MONGO_URI);
+
+mongoose.connect('mongodb://127.0.0.1:27017/jis');
 const db = mongoose.connection;
 db.on("error", (err) => console.log(err));
 db.once("open", () => console.log("Connected to Database!"));
