@@ -5,6 +5,7 @@ import { FaCalendar } from "react-icons/fa";
 import { FaPenClip } from "react-icons/fa6";
 import { RiGroupFill } from "react-icons/ri";
 import { IoHome } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
  
@@ -21,41 +22,37 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
 
   return (
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
-      <div className = 'Logo'></div>
+      <div className = 'Logo'>LOGO</div>
       <div className="sidebar-content">
-      <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
-          <IoHome className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Dashboard</span>
-        </div>
+      {/* <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
+          <IoHome className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/dashboard">Dashboard</Link></span>
+        </div> */}
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Case')}>
           <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}>Case</span>
         </div>
         <div className={`sidebar-submenu ${activeSubMenu === 'Case' && !IsClose ? 'show' : ''}`}>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Create Case')}>Create Case</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('See Case status')}>See Case status</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Pending Cases')}>Pending Cases</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Resolved Cases')}>Resolved Cases</div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('All Cases')}><Link to = "/allCases">All Cases</Link></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Create Case')}><Link to="/createCase">Create Case</Link></div>
         </div>
-
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Record Something')}>
           <FaPenClip className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Record Something</span>
         </div>
         <div className={`sidebar-submenu ${activeSubMenu === 'Record Something'  && !IsClose? 'show' : ''}`}>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Adjournment')}>Record Adjournment</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Proceeding')}>Record Proceeding</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Judgement')}>Record Judgement</div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Adjournment')}><Link to="/record">Record Adjournment</Link></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Proceeding')}><Link to="/record">Record Proceeding</Link></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Judgement')}><Link to="/record" href="/record">Record Judgement</Link></div>
         </div>
 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('See Schedule')}>
-          <FaCalendar className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>See Schedule</span>
+          <FaCalendar className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/seeSchedule">See Schedule</Link></span>
         </div>
 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Manage Team')}>
           <RiGroupFill className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Manage Team</span>
         </div>
         <div className={`sidebar-submenu ${activeSubMenu === 'Manage Team'  && !IsClose? 'show' : ''}`}>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Manage Judges')}>Manage Judges</div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Manage Lawyers')}>Manage Lawyers</div>
-         
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Manage Judges')}><Link to="/manageJudges">Manage Judges</Link></div>
+          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Manage Lawyers')}><Link to="/manageLawyers">Manage Lawyers</Link></div>
         </div>
       </div>
     </div>

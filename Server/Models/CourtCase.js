@@ -7,9 +7,11 @@ const HearingSchema = new mongoose.Schema({
   },
   newHearingDate: {
     type: String,
+    required: true
   },
   summary: {
-    type: String
+    type: String,
+    required: true
   },
   startTime: {
     type: String,
@@ -27,9 +29,11 @@ const AdjournmentSchema = new mongoose.Schema({
   },
   newHearingDate: {
     type: String,
+    required: true
   },
   summary: {
-    type: String
+    type: String,
+    required: true
   },
   startTime: {
     type: String,
@@ -117,7 +121,7 @@ const CourtCaseSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: true
+    default: 'pending'
   },
   
   adjournments: [AdjournmentSchema],
@@ -126,7 +130,8 @@ const CourtCaseSchema = new mongoose.Schema({
       type: String
     },
     summary: {
-      type: String
+      type: String,
+      required: true
     }
   }
 });

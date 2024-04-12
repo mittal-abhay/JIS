@@ -1,5 +1,20 @@
 .home-container{
     display: flex;
     flex-direction: row;
+
+    width: 100vw;
     height: 100vh;
+}
+
+.right-area{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 100%;
+}
+
+.main-box{
+    position: relative;
+    top: 5em;
+
 }

@@ -1,6 +1,4 @@
 .sidebar-container{
-    position: fixed;
-    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,6 +8,7 @@
     background-color: #7E4EFC;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
+    box-shadow: 15px 20px 30px rgba(0, 0, 0, 0.05);
     transition: 0.5s ease;
 }
 .Logo{
@@ -18,7 +17,7 @@
     align-items: center;
     width: 100%;
     height: 10rem;
-    background-image: url('../../../src/assets/logo.png');
+    /* background-image: url('../../../src/assets/logo.png'); */
     background-color: #7E4EFC;
     background-size: cover;
     color: #eddfec;
@@ -56,6 +55,11 @@
     cursor: pointer;
 }
 
+.sidebar-item a{
+    text-decoration: none;
+    color: #eddfec;
+ }
+
 .sidebar-item-icon{
     color: #c5cad3;
     font-size: 1.4rem;
@@ -80,6 +84,13 @@
     background-color: #8a5ff7;
  }
 
+ .sidebar-subitem a{
+    text-decoration: none;
+    color: #eddfec;
+ }
+
+
+
  .sidebar-subitem{
     height: 2.3rem;
     width: 100%;
@@ -89,6 +100,7 @@
     padding: 0.4rem 0.5rem;
     padding-left: 2.5rem;
     transition: 0.5s ease;
+    cursor: pointer;
  }
 
  .sidebar-subitem:hover{
