@@ -34,7 +34,7 @@ const LoginPage = () => {
         // Handle successful login
         console.log('Login successful');
         setError(''); // Clear any previous error message
-        navigate('/home'); // Redirect to /home path after successful login
+        navigate('/'); // Redirect to /home path after successful login
       }
     } catch (error) {
       console.error('Error:', error);

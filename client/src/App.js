@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
-
+import Home from './components/home/Home'
 const App = () => {
   return (
-    <Router>
       <div>
         <AppBar position="static">
           <Toolbar>
@@ -18,11 +17,11 @@ const App = () => {
           </Toolbar>
         </AppBar>
         <Routes>
+          <Route path = "*" element = {<Home/>}/>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
-    </Router>
   );
 };
 

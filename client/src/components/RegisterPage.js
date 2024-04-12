@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Typography, Paper, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material'; // Import MUI components
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const RegisterPage = () => {
     role: ''
   });
   const [error, setError] = useState('');
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -16,7 +17,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, password, role } = formData;
-
+    
     // Password length validation
     if (password.length < 8) {
       setError('Password must be at least 8 characters long');
@@ -38,6 +39,7 @@ const RegisterPage = () => {
       } else {
         // Handle successful registration
         console.log('Registration successful');
+        navigate('/login');
         setError(''); // Clear any previous error message
       }
     } catch (error) {
