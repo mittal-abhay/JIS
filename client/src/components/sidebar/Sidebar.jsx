@@ -24,9 +24,9 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
       <div className = 'Logo'>LOGO</div>
       <div className="sidebar-content">
-      {/* <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
+        <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
           <IoHome className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/dashboard">Dashboard</Link></span>
-        </div> */}
+        </div> 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Case')}>
           <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}>Case</span>
         </div>

@@ -38,7 +38,6 @@ const RegisterPage = () => {
         setError(errorData.message); // Set error message
       } else {
         // Handle successful registration
-        console.log('Registration successful');
         navigate('/login');
         setError(''); // Clear any previous error message
       }

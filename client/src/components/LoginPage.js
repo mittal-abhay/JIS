@@ -32,9 +32,8 @@ const LoginPage = () => {
         setError(errorData.message); // Set error message
       } else {
         // Handle successful login
-        console.log('Login successful');
         setError(''); // Clear any previous error message
-        navigate('/'); // Redirect to /home path after successful login
+        navigate('/dashboard'); // Redirect to /home path after successful login
       }
     } catch (error) {
       console.error('Error:', error);

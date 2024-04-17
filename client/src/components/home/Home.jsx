@@ -28,13 +28,13 @@ const Home = () => {
         <Header handleCollapse = {handleCollapse} IsClose = {IsClose} activeTab = {activeTab} activeSubTab ={activeSubTab}/>
         <div className = "main-box">
           <Routes>
-            <Route path = 'record' element = {<Record/>}/>
-            <Route path = 'dashboard' element ={<Dashboard/>}/>
-            <Route path = 'allCases' element = {<AllCases/>}/>
-            <Route path = 'createCase' element = {<CreateCase/>}/>
-            <Route path = 'manageLawyers' element = {<ManageLawyers/>}/>
-            <Route path = 'manageJudges' element = {<ManageJudges/>}/>
-            <Route path = 'seeSchedule' element = {<SeeSchedule/>}/>
+            <Route exact path = 'record' element = {<Record/>}/>
+            <Route exact path = 'dashboard' element ={<Dashboard/>}/>
+            <Route exact path = 'allCases' element = {<AllCases/>}/>
+            <Route exact path = 'createCase' element = {<CreateCase/>}/>
+            <Route exact path = 'manageLawyers' element = {<ManageLawyers/>}/>
+            <Route exact path = 'manageJudges' element = {<ManageJudges/>}/>
+            <Route exact path = 'seeSchedule' element = {<SeeSchedule/>}/>
           </Routes>
         </div>
       </div>
