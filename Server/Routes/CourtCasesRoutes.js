@@ -29,7 +29,7 @@ router.get('/search', courtCaseController.searchCourtCases);
 router.get('/', courtCaseController.getAllCourtCases);
 
 // Retrieve a single court case by ID
-router.get('/:id', courtCaseController.getCourtCaseById);
+router.get('/:CIN', courtCaseController.getCourtCaseById);
 
 // Update a court case by ID
 router.put('/:id', courtCaseController.updateCourtCase);

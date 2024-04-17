@@ -44,7 +44,8 @@ exports.getAllCourtCases = async (req, res) => {
 // API to retrieve a single court case by ID
 exports.getCourtCaseById = async (req, res) => {
   try {
-    const courtCase = await CourtCase.findById(req.params.id);
+    const CIN = req.params;
+    const courtCase = await CourtCase.findOne({CIN: CIN});
     if (!courtCase) {
       return res.status(404).json({ message: 'Court case not found' });
     }
