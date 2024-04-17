@@ -1,19 +1,20 @@
-// Record.jsx
 import React, { useState } from 'react';
 import styles from './record.module.css';
 import SlotDialog from '../slotDialogBox/slotDialogBox.jsx'; // Import the SlotDialog component
+import axios from 'axios'; // Import axios for making HTTP requests
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Record = () => {
+const Record = (recordType) => {
   const [formData, setFormData] = useState({
     cin: '',
-    comments: '',
+    summary: '',
     newHearingDate: '',
     startTime: '',
     endTime: ''
   });
 
-  const [dialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
-
+  const [dialogOpen, setDialogOpen] = useState(false); 
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -22,10 +23,31 @@ const Record = () => {
     }));
   };
 
-  const handleSubmit = e => {
+  const token = JSON.parse(localStorage.getItem('isLoggedIn')).token;
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log(formData); // Log form data on form submission
-    setFormData({ cin: '', comments: '', newHearingDate: '', startTime: '', endTime: '' }); // Clear form fields
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/court_cases/${recordType.recordType}/${formData.cin}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        }
+      );
+      console.log(response.data); // Log response data
+      toast.success('Summary added successfully!'); // Display success message
+      setFormData({ cin: '', summary: '', newHearingDate: '', startTime: '', endTime: '' }); // Clear form fields
+    } catch (error) {
+      if (error && error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // Display error message
+      } else {
+        toast.error('An error occurred. Please try again.'); // Default error message
+      }
+    }
+    
   };
 
   const handleDialogBoxOpen = () => {
@@ -38,6 +60,7 @@ const Record = () => {
 
   return (
     <div className={styles.mainContainer}>
+      <ToastContainer/>
       <div className={styles.formContainer}>
         <h2 className={styles.heading}>Add Summary</h2>
         <form onSubmit={handleSubmit}>
@@ -53,11 +76,11 @@ const Record = () => {
             />
           </div>
           <div>
-            <label className={styles.formLabels}>Comments:</label>
+            <label className={styles.formLabels}>Summary:</label>
             <div>
               <textarea
-                name="comments"
-                value={formData.comments}
+                name="summary"
+                value={formData.summary}
                 onChange={handleChange}
                 placeholder="Enter summary here"
                 style={{
@@ -109,9 +132,11 @@ const Record = () => {
           </div>
         </form>
       </div>
-
+      
       <SlotDialog open={dialogOpen} onClose={handleDialogBoxClose} /> {/* Render the SlotDialog component */}
+      
     </div>
+
   );
 };
 

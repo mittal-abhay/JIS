@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import { Container, Typography, Paper, TextField, Button, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +9,8 @@ const LoginPage = () => {
     password: ''
   });
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,25 +21,11 @@ const LoginPage = () => {
     const { username, password } = formData;
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message); // Set error message
-      } else {
-        // Handle successful login
-        setError(''); // Clear any previous error message
-        navigate('/dashboard'); // Redirect to /home path after successful login
-      }
+      await login(username, password);
+      navigate('/home');
     } catch (error) {
       console.error('Error:', error);
-      setError('An unexpected error occurred'); // Set error message for unexpected errors
+      setError(error.message);
     }
   };
 

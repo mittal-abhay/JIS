@@ -1,7 +1,9 @@
 import { Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Delete } from "@mui/icons-material"; // Import the delete icon
-import { mockDataTeam } from "../../mockdata";
+import { Delete } from "@mui/icons-material"; // Import the delete ico
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 
 const ManageJudges = () => {
   const colors = {
@@ -12,7 +14,6 @@ const ManageJudges = () => {
 
   const columns = [
     { field: "id", headerName: "ID" },
-    { field: "username", headerName: "Username", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
     { field: "role", headerName: "Role", flex: 1 },
     {
@@ -28,18 +29,65 @@ const ManageJudges = () => {
       ),
     },
   ];
+  const [casesData, setCasesData] = useState([]);
 
+  const token = JSON.parse(localStorage.getItem('isLoggedIn')).token;
+
+  useEffect(() => {
+    const fetchJudges = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/users/judge", {
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        }
+      );
+        setCasesData(response.data);
+      } catch (error) {
+        console.error("Error fetching cases data:", error);
+      }
+    };
+
+    fetchJudges();
+  }, []);
   // Adjusting mockDataTeam to have only id, username, and role
-  const adjustedMockData = mockDataTeam.map((data) => ({
-    id: data.id,
-    username: data.name,
-    name: data.name,
+  const adjustedMockData = casesData.map((data) => ({
+    id: data._id,
+    name: data.username,
     role: 'Judge',
   }));
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     // Implement delete logic here
-    console.log("Deleting judge with ID:", id);
+
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/users/${id}`, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`
+        }
+      }
+      )
+      const fetchJudges = async () => {
+        try {
+          const response = await axios.get("http://localhost:5000/api/users/judge", {
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `${token}`
+            }
+          }
+        );
+          setCasesData(response.data);
+        } catch (error) {
+          console.error("Error fetching cases data:", error);
+        }
+      };
+  
+      fetchJudges();
+      }catch(e){
+        console.log(e);
+      }
     // Update the state or perform API call to delete the judge
   };
 

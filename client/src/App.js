@@ -1,20 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
+import {  Route, Routes } from 'react-router-dom';
 import Home from './components/home/Home'
 import LandingPage from './components/LandingPage/LandingPage';
-const App = () => {
-  return (
-      <div>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path = "*" element = {<Home/>}/>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+import Lawyers from './components/Lawyers/Lawyers';
 
-        </Routes>
-      </div>
+const App = () => {
+  
+  return (
+    <>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="*" element={<Home />} />
+      <Route exact path = "/lawyers" element={<Lawyers />} />
+    </Routes>
+    </>
   );
 };
 

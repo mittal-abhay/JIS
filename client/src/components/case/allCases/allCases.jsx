@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { mockDataTeam } from "../../mockdata";
+import axios from "axios";
+import { useEffect } from "react";
 
 const AllCases = () => {
   const colors = {
@@ -15,26 +17,48 @@ const AllCases = () => {
     { field: "Lawyer", headerName: "Lawyer", flex: 1 },
     { field: "Judge", headerName: "Judge", flex: 1 },
     { field: "Status", headerName: "Status", flex: 1 },
-    { field: "Date", headerName: "Date", type: "date", flex: 1 }, // Add date field
+    { field: "EndDate", headerName: "EndDate", type: "date", flex: 1 }, // Add date field
   ];
 
+  const [casesData, setCasesData] = useState([]);
+
+  const token = JSON.parse(localStorage.getItem('isLoggedIn')).token;
+
+  useEffect(() => {
+    const fetchCasesData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/court_cases/", {
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        }
+      );
+        setCasesData(response.data);
+      } catch (error) {
+        console.error("Error fetching cases data:", error);
+      }
+    };
+
+    fetchCasesData();
+  }, []);
+  
   const [filterStartDate, setFilterStartDate] = useState(null);
   const [filterEndDate, setFilterEndDate] = useState(null);
 
-  // Adjusting mockDataTeam to have only CIN, Lawyer, Judge, Status, and Date
-  const adjustedMockData = mockDataTeam.map((data) => ({
-    id: data.id,
-    CIN: data.id,
-    Lawyer: data.name,
-    Judge: "Sample Judge", // You may replace this with actual judge names
-    Status: data.status, // You may replace this with actual status
-    Date: data.date, // Replace 'date' with the actual date field in your mock data
+ 
+  const rowData = casesData.map((data) => ({
+    id: data._id,
+    CIN: data.CIN,
+    Lawyer: data.lawyer,
+    Judge: data.judge,
+    Status: data.status,
+    EndDate: data.judgement ? new Date(data.judgement.date) : null
   }));
 
-  // Filtering logic based on start and end dates
-  const filteredRows = adjustedMockData.filter((row) => {
+  const filteredRows = rowData.filter((row) => {
     if (!filterStartDate && !filterEndDate) {
-      return true; // No filter applied
+      return true;
     }
     if (!filterStartDate) {
       return new Date(row.Date) <= filterEndDate;
@@ -90,3 +114,5 @@ const AllCases = () => {
 };
 
 export default AllCases;
+
+
