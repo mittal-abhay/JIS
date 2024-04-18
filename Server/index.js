@@ -7,8 +7,14 @@ const slotRoutes = require('./Routes/SlotRoutes');
 const dotenv = require('dotenv');
 const app = express();
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 dotenv.config();
+
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  credentials: true // Allow credentials (e.g., cookies, authorization headers)
+}));
 
 
 mongoose.connect(process.env.MONGO_URI);

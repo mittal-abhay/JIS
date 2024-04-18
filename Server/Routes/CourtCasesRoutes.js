@@ -4,6 +4,8 @@ const router = express.Router();
 const courtCaseController = require('../Controllers/CourtCasesController');
 const { authenticateRole, ROLES } = require('../Middlewares/authMiddleware');
 
+router.get("/:cin", courtCaseController.getCaseByCIN);
+
 // Ensure only Registrar can access court cases routes
 router.use(authenticateRole([ROLES.REGISTRAR]));
 
@@ -22,6 +24,7 @@ router.get('/hearing_date/:date', courtCaseController.getCourtCasesForHearingDat
 // Retrieve the status of a specific court case identified by CIN
 router.get('/status/:CIN', courtCaseController.getCaseStatus);
 
+
 // Search Court Cases API
 router.get('/search', courtCaseController.searchCourtCases);
 
@@ -38,12 +41,12 @@ router.put('/:id', courtCaseController.updateCourtCase);
 router.delete('/:id', courtCaseController.deleteCourtCase);
 
 // Record Adjournment API
-router.post('/record_adjournment/:id', courtCaseController.recordAdjournment);
+router.post('/record_adjournment/:cin', courtCaseController.recordAdjournment);
 
 // Record Court Proceedings API
-router.post('/record_proceedings/:id', courtCaseController.recordProceedings);
+router.post('/record_proceedings/:cin', courtCaseController.recordProceedings);
 
 // Record Judgment API
-router.post('/record_judgement/:id', courtCaseController.recordJudgment);
+router.post('/record_judgement/:cin', courtCaseController.recordJudgment);
 
 module.exports = router;

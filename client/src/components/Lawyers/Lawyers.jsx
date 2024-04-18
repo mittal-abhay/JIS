@@ -5,17 +5,18 @@ import Header from "../header/Header.jsx";
 import { Routes, Route } from 'react-router-dom';
 import axios from "axios";
 
-axios.defaults.baseURL=process.env.API_URL;
+axios.defaults.baseURL="http://localhost:8000/";
 
 const API_URL = process.env.API_URL;
-console.log(process.env.API_URL)
-console.log(API_URL);
+
 const Lawyers = () => {
   const [IsClose, setIsClose] = useState(false);
   const [activeTab, setActiveTab] = useState('See Case');
   const [activeSubTab, setActiveSubTab] = useState(null);
   const [hidecase, setHidecase] = useState(true);
   const [caseid, setCaseid] = useState(null);
+  const [caseData, setCaseData] = useState(null);
+
 
   const handleCollapse = () => {
     setIsClose(!IsClose);
@@ -27,39 +28,12 @@ const Lawyers = () => {
     event.preventDefault();
     setHidecase(false);
     setCaseid(inputValue);
-    
-    
   };
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const mockData = {
-    CIN: 'ABC',
-    defendant: {
-      name: 'John Doe',
-      address: '123 Main St, City, Country',
-    },
-    crime: {
-      type: 'Robbery',
-      date_committed: '2023-01-15',
-      location: 'City Bank',
-    },
-    arrest: {
-      arresting_officer: 'Officer Smith',
-      date: '2023-01-16',
-    },
-    judge: 'Judge Smith',
-    prosecutor: 'Prosecutor Johnson',
-    lawyer: 'Lawyer Williams',
-    start_date: '2023-01-17',
-    status: 'Ongoing',
-    judgment: {
-      date: '2023-02-10',
-      summary: 'Guilty verdict',
-    },
-  };
 
   const DefendantInfo = ({ defendant }) => (
     <div className='section'>
@@ -108,14 +82,18 @@ const Lawyers = () => {
     </div>
   );
 
-  const [caseData, setCaseData] = useState(null);
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`api/court_cases/:${caseid}`); // Use template literal for dynamic caseid
+        const response = await axios.get(`api/court_cases/${caseid}`, {
+          headers: {
+          "Content-Type" : "application/json",
+          "Authorization": `${token}`
+          }
+        }); // Use template literal for dynamic caseid
+
         setCaseData(response.data);
+        console.log(caseData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -154,7 +132,7 @@ const Lawyers = () => {
         </div>
       </div>
     </div>
-     </>
+    </>
   )
 };
 
