@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from "react";
 import Sidebar_2 from '../sidebar_2/Sidebar_2.jsx';
-import './Lawyers.css'
+import './Judge.css'
 import Header from "../header/Header.jsx";
 import axios from 'axios';
 
 axios.defaults.baseURL = "http://localhost:8000/";
 
-const Lawyers = () => {
+const Judges = () => {
   const [IsClose, setIsClose] = useState(false);
   const [activeTab, setActiveTab] = useState('See Case');
   const [activeSubTab, setActiveSubTab] = useState(null);
@@ -167,4 +167,4 @@ const Lawyers = () => {
   );
 };
 
-export default Lawyers;
+export default Judges;

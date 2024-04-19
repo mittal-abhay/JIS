@@ -41,6 +41,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+
 // API to view a judge or lawyer by ID (for registrar)
 exports.getUserById = async (req, res) => {
   try {

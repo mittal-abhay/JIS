@@ -1,0 +1,134 @@
+.home-contianer{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+}
+
+.right-area{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 100%;
+}
+
+.main_box{
+    position: relative;
+    top: 5em;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-form {
+  max-width: 300px;
+}
+
+.my-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.my-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.my-button:hover {
+  background-color: #0056b3;
+}
+
+.case-container{
+  display: block;
+}
+
+.hide-case{
+  display: none;
+}
+
+.case-main-div {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.case {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.case h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.case p {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.section {
+  margin-bottom: 15px;
+}
+
+.section h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+.center-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CIN{
+  font-size:24px;
+  padding-top:6px;
+  padding-left: 15px;
+}
+
+.section{
+  display: flex;
+  flex-direction: column;
+}
+.sub-heading{
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-bottom: 7px;
+}
+
+.info{
+  padding-top:6px;
+  padding-left: 15px;
+  font-size: 20px;
+}
+
+.hearing-list{
+  display: flex;
+}
+
+.hearing-info{
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  font-size:16px;
+}

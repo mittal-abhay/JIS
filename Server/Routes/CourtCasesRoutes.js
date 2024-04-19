@@ -46,7 +46,7 @@ router.post('/record_adjournment/:cin', courtCaseController.recordAdjournment);
 // Record Court Proceedings API
 router.post('/record_proceedings/:cin', courtCaseController.recordProceedings);
 
-// Record Judgment API
-router.post('/record_judgement/:cin', courtCaseController.recordJudgment);
+// Record judgement API
+router.post('/record_judgement/:cin', courtCaseController.recordjudgement);
 
 module.exports = router;

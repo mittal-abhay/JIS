@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './sidebar.css';
 import { GoLaw } from "react-icons/go";
 import { FaCalendar } from "react-icons/fa";
@@ -7,7 +7,7 @@ import { RiGroupFill } from "react-icons/ri";
 import { IoHome } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
+const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab, setRecordType, recordType}) => {
 
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const handleSubMenuClick = (id) => {
@@ -19,6 +19,13 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
   const handleSubtabClick = (id) => {
     setActiveSubTab(id);
   }
+
+  const handleRecordType = (type) => {
+    setRecordType(type);
+  }
+  useEffect(() => {
+    setRecordType(recordType);
+  }, [recordType, setRecordType]);
 
   return (
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
@@ -37,11 +44,17 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab}) => {
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Record Something')}>
           <FaPenClip className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Record Something</span>
         </div>
-        <div className={`sidebar-submenu ${activeSubMenu === 'Record Something'  && !IsClose? 'show' : ''}`}>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Adjournment')}><Link to="/record">Record Adjournment</Link></div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Proceeding')}><Link to="/record">Record Proceeding</Link></div>
-          <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Record Judgement')}><Link to="/record" href="/record">Record Judgement</Link></div>
+        <div className={`sidebar-submenu ${activeSubMenu === 'Record Something' && !IsClose ? 'show' : ''}`}>
+        <div className="sidebar-subitem" onClick={() => { handleSubtabClick('Record Adjournment'); handleRecordType('record_adjournment'); }}>
+          <Link to="/record">Record Adjournment</Link>
         </div>
+        <div className="sidebar-subitem" onClick={() => { handleSubtabClick('Record Proceeding'); handleRecordType('record_proceedings'); }}>
+          <Link to="/record">Record Proceeding</Link>
+        </div>
+        <div className="sidebar-subitem" onClick={() => { handleSubtabClick('Record Judgement'); handleRecordType('record_judgement'); }}>
+          <Link to="/record">Record Judgement</Link>
+        </div>
+      </div>
 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('See Schedule')}>
           <FaCalendar className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/seeSchedule">See Schedule</Link></span>

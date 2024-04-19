@@ -7,7 +7,6 @@ exports.createCourtCase = async (req, res) => {
   try {
     // Destructure required fields from req.body
     const { CIN, defendant, crime, arrest, timeline, judge, prosecutor, lawyer, start_date} = req.body;
-    
     // Check if any of the required fields are missing
     const missingFields = [];
     if (!CIN) missingFields.push('CIN');
@@ -44,10 +43,18 @@ exports.createCourtCase = async (req, res) => {
 
     // Proceed with creating the court case
     const ondate = timeline[0].date;
-    const start = timeline[0].startTime;
+    const start= timeline[0].startTime;
     const end = timeline[0].endTime;
-
-    const slot = await Slot.findOne({ date: ondate, 'time.startTime': start, 'time.endTime': end, isEmpty: true });
+  
+    const slots = await Slot.find({ 
+      date: ondate,
+      isEmpty: true
+  }).collation({ locale: 'en', strength: 2 });
+  
+  // Filter slots to find one with matching startTime and endTime
+  const slot = slots.find(slot => slot.time.startTime === start && slot.time.endTime === end);
+  
+  
     if (slot) {
       const courtCase = await CourtCase.create(req.body);
       slot.case_id = courtCase._id;
@@ -56,7 +63,6 @@ exports.createCourtCase = async (req, res) => {
       return res.status(201).json({ courtCase });
     }
 
-    // If no empty slot is found, return an error message
     return res.status(400).json({ error: 'No available slots found' });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -155,8 +161,8 @@ exports.getResolvedCourtCases = async (req, res) => {
 
       const resolvedCourtCases = await CourtCase.find({
           status: 'resolved',
-          'judgment.date': { $gte: startDate, $lte: endDate }
-      }).sort({ 'judgment.date': 1 });
+          'judgement.date': { $gte: startDate, $lte: endDate }
+      }).sort({ 'judgement.date': 1 });
 
       res.status(200).json(resolvedCourtCases);
   } catch (err) {
@@ -167,17 +173,26 @@ exports.getResolvedCourtCases = async (req, res) => {
 
 // API to retrieve court cases scheduled for hearing on a particular date
 exports.getCourtCasesForHearingDate = async (req, res) => {
-    try {
-      const { date } = req.params;
-      const courtCasesForHearingDate = await CourtCase.find({ 'timeline.date': date });
-      if(courtCasesForHearingDate.length === 0) {
-        return res.status(404).json({ message: 'No court cases scheduled for this date' });
-      }
-      res.status(200).json(courtCasesForHearingDate);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+  try {
+    const { date } = req.params;
+    const courtCasesForHearingDate = await CourtCase.find({ 'timeline.date': date });
+    if(courtCasesForHearingDate.length === 0) {
+      return res.status(404).json({ message: 'No court cases scheduled for this date' });
     }
+    
+    const courtCasesWithIndexes = courtCasesForHearingDate.map(courtCase => {
+      const index = courtCase.timeline.findIndex(item => item.date === date);
+      const startTime = courtCase.timeline[index].startTime;
+      const endTime = courtCase.timeline[index].endTime;
+      return { courtCase, startTime, endTime };
+    });
+    
+    res.status(200).json(courtCasesWithIndexes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
   
 
@@ -239,7 +254,14 @@ exports.recordAdjournment = async (req, res) => {
         if(courtCase.status === 'resolved'){  
           return res.status(400).json({ message: 'The case is already closed'});
         }
-        const slot = await Slot.findOne({ date: newHearingDate, 'time.startTime': startTime, 'time.endTime': endTime, isEmpty: true});
+
+        const slots = await Slot.find({ 
+          date: newHearingDate,
+          isEmpty: true
+      }).collation({ locale: 'en', strength: 2 });
+
+        const slot = slots.find(slot => slot.time.startTime === startTime && slot.time.endTime === endTime);
+
         if (slot) {
           slot.case_id = courtCase._id;
           slot.isEmpty = false;
@@ -294,7 +316,14 @@ exports.recordProceedings = async (req, res) => {
     if(courtCase.status === 'resolved'){  
       return res.status(400).json({ message: 'The case is already closed'});
     }
-    const slot = await Slot.findOne({ date: newHearingDate, 'time.startTime': startTime, 'time.endTime': endTime, isEmpty: true});
+    
+    const slots = await Slot.find({ 
+      date: newHearingDate,
+      isEmpty: true
+  }).collation({ locale: 'en', strength: 2 });
+
+    const slot = slots.find(slot => slot.time.startTime === startTime && slot.time.endTime === endTime);
+
     if (slot) {
       slot.case_id = courtCase._id;
       slot.isEmpty = false;
@@ -328,7 +357,7 @@ exports.recordProceedings = async (req, res) => {
 }
 };
 
-exports.recordJudgment = async (req, res) => {
+exports.recordjudgement = async (req, res) => {
     try {
         const { summary } = req.body;
         const { cin } = req.params;
@@ -338,6 +367,20 @@ exports.recordJudgment = async (req, res) => {
           return res.status(404).json({ message: 'Court case not found' });
         }
         const lastDate = courtCase.timeline[courtCase.timeline.length - 1].date;
+        const startTime = courtCase.timeline[courtCase.timeline.length - 1].startTime;
+        const endTime = courtCase.timeline[courtCase.timeline.length - 1].endTime;
+
+        const slots = await Slot.find({ 
+          date: lastDate,
+          isEmpty: true
+      }).collation({ locale: 'en', strength: 2 });
+    
+        const slot = slots.find(slot => slot.time.startTime === startTime && slot.time.endTime === endTime);
+
+        if(slot){
+          slot.isEmpty = false;
+        }
+
         if(courtCase.status === 'resolved'){  
           return res.status(400).json({ message: 'The case is already closed'});
         }
@@ -346,13 +389,13 @@ exports.recordJudgment = async (req, res) => {
         }
         const updatedCourtCase = await CourtCase.findOneAndUpdate(
             { CIN: cin },
-            { $set: { judgment: { date: lastDate, summary: summary }, status: 'resolved' }},
+            { $set: { judgement: { date: lastDate, summary: summary }, status: 'resolved' }},
             { new: true }
         );
         if (!updatedCourtCase) {
             return res.status(404).json({ message: 'Court case not found' });
         }
-        res.status(200).json({ message: "Judgment recorded successfully", updatedCourtCase });
+        res.status(200).json({ message: "judgement recorded successfully", updatedCourtCase });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

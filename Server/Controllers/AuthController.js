@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
     })
     .json({
       message: "User registered successfully",
-      user: { ...newUser._doc, passwordHash: "" },
+      user: { ...newUser._doc, token },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -76,9 +76,17 @@ exports.login = async (req, res) => {
     })
     .json({
       message: "User logged in successfully",
-      user: { ...user._doc, passwordHash: "" },
+      user: { ...user._doc, token },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.logout = async (req, res) => {
+  res
+    .status(200)
+    .clearCookie("access_token")
+    .json({ message: "User logged out successfully" });
+};
+

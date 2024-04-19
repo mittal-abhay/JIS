@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Typography, Paper, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material'; // Import MUI components
+import { Container, Typography, Paper, TextField, Button, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const RegisterPage = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { register } = useAuth();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -25,26 +28,11 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password, role })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.log("kjsdjnfkjds");
-        setError(errorData.message); // Set error message
-      } else {
-        // Handle successful registration
-        navigate('/login');
-        setError(''); // Clear any previous error message
-      }
+      await register({ username, password, role });
+      navigate('/login');
     } catch (error) {
       console.error('Error:', error);
-      setError('An unexpected error occurred'); // Set error message for unexpected errors
+      setError(error.message);
     }
   };
 
@@ -70,7 +58,7 @@ const RegisterPage = () => {
             </Select>
           </FormControl>
           <Button type="submit" variant="contained" color="primary" fullWidth>Sign Up</Button>
-          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>} {/* Display error message if exists */}
+          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
         </form>
       </Paper>
     </Container>
