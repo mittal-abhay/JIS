@@ -14,6 +14,10 @@ const Lawyers = () => {
   const [hidecase, setHidecase] = useState(true);
   const [caseData, setCaseData] = useState(null);
   const [inputValue, setInputValue] = useState('');
+  const [searchPara, setSearchPara] = useState('');
+  const [inputValue_2, setInputValue_2] = useState('');
+  const [hideCIN, setHideCIN] = useState('true')
+
 
   const handleCollapse = () => {
     setIsClose(!IsClose);
@@ -23,12 +27,43 @@ const Lawyers = () => {
     event.preventDefault();
     setHidecase(false);
     setCaseId(inputValue);
-    console.log(caseId);
   };
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
+
+  const handleChange_2 = (event) => {
+    setInputValue_2(event.target.value);
+  };
+
+  const handleSubmit_2 = (event) => {
+    event.preventDefault();
+    setHideCIN(false);
+    setSearchPara(inputValue_2);
+    console.log(searchPara);
+  }
+  useEffect (() => {
+    const fetchCaseId = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem('isLoggedIn')).token;
+        const response = await axios.get(`api/court_cases/search?keywords=${searchPara}`, {
+          headers:{
+            "Content-Type":"application/json",
+            "Authorization":`${token}`
+          }
+        });
+        // setCINFound(response.data);
+        console.log(response)
+      } catch (error) {
+        console.log("Error in Fetching data:", error);
+      }
+    }
+
+    if(searchPara) {
+      fetchCaseId();
+    } 
+  }, [searchPara]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,10 +75,7 @@ const Lawyers = () => {
             "Authorization":`${token}`
           }
         });
-
-        console.log(response.data)
         setCaseData(response.data);
-        console.log(caseData);
       } catch (error) {
         console.log("Error in Fetching data:", error);
       }
@@ -61,11 +93,31 @@ const Lawyers = () => {
       <Sidebar_2 IsClose={IsClose} setActiveTab={setActiveTab} setActiveSubTab={setActiveSubTab} />
       <div className="right-area">
         <Header handleCollapse={handleCollapse} IsClose={IsClose} activeTab={activeTab} activeSubTab={activeSubTab} />
+
+        {/* search case id */}
+        <div className="main_box">
+          <div className="center-content">
+            <form onSubmit={handleSubmit_2} className="my-form">
+              <label>
+                Enter Search Parameter to Search Case ID:
+                <input type="text" value={inputValue_2} onChange={handleChange_2} className="my-input" />
+              </label>
+              <button type="submit" className="my-button">Submit</button>
+            </form>
+          </div>
+          <div className={`case-container ${hideCIN ? 'hide-case' : ''}`}>
+            <ul>
+              
+            </ul>
+          </div>
+        </div>
+
+        {/* see cases */}
         <div className="main_box">
           <div className="center-content">
             <form onSubmit={handleSubmit} className="my-form">
               <label>
-                Enter CIN Number:
+                Enter Case Idenification Number:
                 <input type="text" value={inputValue} onChange={handleChange} className="my-input" />
               </label>
               <button type="submit" className="my-button">Submit</button>

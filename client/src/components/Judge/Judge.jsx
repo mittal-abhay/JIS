@@ -57,6 +57,7 @@ const Judges = () => {
   
   console.log("caseData:", caseData);
   return (
+    <>
     <div className="home-contianer">
       <Sidebar_2 IsClose={IsClose} setActiveTab={setActiveTab} setActiveSubTab={setActiveSubTab} />
       <div className="right-area">
@@ -164,6 +165,7 @@ const Judges = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

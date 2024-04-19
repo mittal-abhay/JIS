@@ -24,10 +24,9 @@ const Sidebar_2 = ({ IsClose, setActiveTab, setActiveSubTab}) => {
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
       <div className = 'Logo'>LOGO</div>
       <div className="sidebar-content">
-        <div className="sidebar-item" onClick={() => handleSubMenuClick('See Case')}>
-          <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}>See Case</span>
+        <div className="sidebar-item" onClick={() => handleSubMenuClick('See Cases')}>
+        <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}>See Cases</span>
         </div>
-
       </div>
     </div>
   );
