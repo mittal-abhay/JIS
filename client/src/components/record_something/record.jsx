@@ -28,7 +28,7 @@ const Record = (recordType) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/court_cases/${recordType.recordType}/${formData.cin}`,
+        `http://localhost:8000/api/court_cases/${recordType.recordType}/${formData.cin}`,
         formData,
         {
           headers: {

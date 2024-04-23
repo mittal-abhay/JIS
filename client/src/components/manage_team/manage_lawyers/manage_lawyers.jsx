@@ -36,7 +36,7 @@ const ManageLawyers = () => {
   useEffect(() => {
     const fetchLawyers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/users/lawyer", {
+        const response = await axios.get("http://localhost:8000/api/users/lawyer", {
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `${token}`
@@ -62,7 +62,7 @@ const ManageLawyers = () => {
     // Implement delete logic here
 
     try {
-      const response = await axios.delete(`http://localhost:5000/api/users/${id}`, {
+      const response = await axios.delete(`http://localhost:8000/api/users/${id}`, {
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `${token}`
@@ -71,7 +71,7 @@ const ManageLawyers = () => {
       )
       const fetchLawyers = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/users/lawyer", {
+          const response = await axios.get("http://localhost:8000/api/users/lawyer", {
             headers: { 
               'Content-Type': 'application/json',
               'Authorization': `${token}`

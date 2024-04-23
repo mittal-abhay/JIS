@@ -40,22 +40,16 @@ const Judges = () => {
             "Authorization":`${token}`
           }
         });
-
-        console.log(response.data)
         setCaseData(response.data);
-        console.log(caseData);
       } catch (error) {
-        console.log("Error in Fetching data:", error);
+        setCaseData(null);
       }
     };
-
     if(caseId) {
       fetchData();
     }
   }, [caseId]);
 
-  
-  console.log("caseData:", caseData);
   return (
     <>
     <div className="home-contianer">
@@ -67,7 +61,7 @@ const Judges = () => {
             <form onSubmit={handleSubmit} className="my-form">
               <label>
                 Enter CIN Number:
-                <input type="text" value={inputValue} onChange={handleChange} className="my-input" />
+                <input type="text" value={inputValue} onChange={handleChange} className="my-input" required = 'true'/>
               </label>
               <button type="submit" className="my-button">Submit</button>
             </form>
@@ -157,7 +151,7 @@ const Judges = () => {
                     </div>
                   </div>
                 ) : (
-                  <p>Loading....</p>
+                  <p style={{color: 'red', textAlign:'center'}}>Nothing to show</p>
                 )}
             </div>
           </div>

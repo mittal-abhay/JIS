@@ -77,6 +77,7 @@ const Lawyers = () => {
         });
         setCaseData(response.data);
       } catch (error) {
+        setCaseData(null);
         console.log("Error in Fetching data:", error);
       }
     };
@@ -95,35 +96,20 @@ const Lawyers = () => {
         <Header handleCollapse={handleCollapse} IsClose={IsClose} activeTab={activeTab} activeSubTab={activeSubTab} />
 
         {/* search case id */}
-        <div className="main_box">
-          <div className="center-content">
-            <form onSubmit={handleSubmit_2} className="my-form">
-              <label>
-                Enter Search Parameter to Search Case ID:
-                <input type="text" value={inputValue_2} onChange={handleChange_2} className="my-input" />
-              </label>
-              <button type="submit" className="my-button">Submit</button>
-            </form>
-          </div>
-          <div className={`case-container ${hideCIN ? 'hide-case' : ''}`}>
-            <ul>
-              
-            </ul>
-          </div>
-        </div>
+
 
         {/* see cases */}
         <div className="main_box">
           <div className="center-content">
             <form onSubmit={handleSubmit} className="my-form">
               <label>
-                Enter Case Idenification Number:
+                Enter Case Identification Number:
                 <input type="text" value={inputValue} onChange={handleChange} className="my-input" />
               </label>
               <button type="submit" className="my-button">Submit</button>
             </form>
           </div>
-          <div className={`case-container ${hidecase ? 'hide-case' : '' }`}>
+          <div className={`lcase-container ${hidecase ? 'hide-case' : '' }`}>
             <div className="case-main-div">
                 {caseData !== null ? (
                   <div className="case">
@@ -208,7 +194,7 @@ const Lawyers = () => {
                     </div>
                   </div>
                 ) : (
-                  <p>Loading....</p>
+                  <p style={{color: 'red', textAlign:'center'}}>Nothing to show</p>
                 )}
             </div>
           </div>

@@ -36,7 +36,7 @@ const ManageJudges = () => {
   useEffect(() => {
     const fetchJudges = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/users/judge", {
+        const response = await axios.get("http://localhost:8000/api/users/judge", {
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `${token}`
@@ -62,7 +62,7 @@ const ManageJudges = () => {
     // Implement delete logic here
 
     try {
-      const response = await axios.delete(`http://localhost:5000/api/users/${id}`, {
+      const response = await axios.delete(`http://localhost:8000/api/users/${id}`, {
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `${token}`
@@ -71,7 +71,7 @@ const ManageJudges = () => {
       )
       const fetchJudges = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/users/judge", {
+          const response = await axios.get("http://localhost:8000/api/users/judge", {
             headers: { 
               'Content-Type': 'application/json',
               'Authorization': `${token}`

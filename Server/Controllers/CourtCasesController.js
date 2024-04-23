@@ -98,7 +98,6 @@ exports.getCourtCaseById = async (req, res) => {
 exports.getCaseByCIN = async (req, res) => {
   try {
     const { cin } = req.params;
-    
     const caseDetails = await CourtCase.findOne({ CIN: cin });
 
     if (!caseDetails) {
@@ -213,28 +212,31 @@ exports.getCaseStatus = async (req, res) => {
 
 // API to search for past court cases by keywords
 exports.searchCourtCases = async (req, res) => {
-    try {
+  try {
+      console.log('Hi'); // Log query for debugging
       const { keywords } = req.query;
-  
+      console.log(req.query);
+      console.log('Keywords:', keywords); // Log keywords for debugging
+
       // Perform search by keywords
       const courtCases = await CourtCase.find({
-        $or: [
-          { 'defendant.name': { $regex: keywords, $options: 'i' } },
-          { 'crime.type': { $regex: keywords, $options: 'i' } },
-          { 'crime.location': { $regex: keywords, $options: 'i' } },
-          { 'arrest.arresting_officer': { $regex: keywords, $options: 'i' } },
-          { 'judge': { $regex: keywords, $options: 'i' } },
-          { 'prosecutor': { $regex: keywords, $options: 'i' } },
-          { 'lawyer': { $regex: keywords, $options: 'i' } },
-        ]
+          $or: [
+              { 'defendant.name': { $regex: keywords, $options: 'i' } },
+              { 'crime.type': { $regex: keywords, $options: 'i' } },
+              { 'crime.location': { $regex: keywords, $options: 'i' } },
+              { 'arrest.arresting_officer': { $regex: keywords, $options: 'i' } },
+              { 'judge': { $regex: keywords, $options: 'i' } },
+              { 'prosecutor': { $regex: keywords, $options: 'i' } },
+              { 'lawyer': { $regex: keywords, $options: 'i' } },
+          ]
       });
-  
+      console.log('Search Result:', courtCases); // Log search result for debugging
       res.status(200).json(courtCases);
-    } catch (err) {
+  } catch (err) {
       res.status(500).json({ error: err.message });
-    }
-  };
-  
+  }
+};
+
 
 
 exports.recordAdjournment = async (req, res) => {

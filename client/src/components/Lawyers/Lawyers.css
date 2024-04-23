@@ -19,6 +19,7 @@
   margin-left: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .my-form {
@@ -34,7 +35,7 @@ border-radius: 5px;
 }
 
 .my-button {
-background-color: #007bff;
+background-color: #7E4EFC;
 color: #fff;
 border: none;
 border-radius: 5px;
@@ -46,8 +47,10 @@ cursor: pointer;
 background-color: #0056b3;
 }
 
-.case-container{
-display: block;
+.lcase-container{
+height: 60vh;
+width: 100%;
+overflow-y: auto;
 }
 
 .hide-case{
@@ -56,9 +59,7 @@ display: none;
 
 .case-main-div {
 font-family: Arial, sans-serif;
-margin: 0 auto;
-padding: 20px;
-max-width: 600px;
+width: 80%;
 }
 
 .case {
@@ -96,7 +97,6 @@ font-weight: bold;
 .center-content{
 display: flex;
 flex-direction: column;
-align-items: center;
 }
 
 .CIN{

@@ -16,7 +16,7 @@ const SeeSchedule = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.get(`http://localhost:5000/api/court_cases/hearing_date/${formData.date}`,{
+        const response = await axios.get(`http://localhost:8000/api/court_cases/hearing_date/${formData.date}`,{
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `${token}`

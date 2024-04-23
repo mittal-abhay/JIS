@@ -27,7 +27,7 @@ const AllCases = () => {
   useEffect(() => {
     const fetchCasesData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/court_cases/", {
+        const response = await axios.get("http://localhost:8000/api/court_cases/", {
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `${token}`

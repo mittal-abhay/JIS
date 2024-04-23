@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [IsClose, setIsClose] = useState(false);
-  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [activeTab, setActiveTab] = useState('Case');
   const [activeSubTab, setActiveSubTab] = useState(null);
   const [recordType, setRecordType] = useState('');
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Home = () => {
         <div className = "main-box">
           <Routes>
             <Route exact path = 'record' element = {<Record recordType={recordType}/>}/>
-            <Route exact path = 'dashboard' element ={<Dashboard/>}/>
+            {/* <Route exact path = 'dashboard' element ={<Dashboard/>}/> */}
             <Route exact path = 'allCases' element = {<AllCases/>}/>
             <Route exact path = 'createCase' element = {<CreateCase/>}/>
             <Route exact path = 'manageLawyers' element = {<ManageLawyers/>}/>

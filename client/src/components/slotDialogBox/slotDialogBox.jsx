@@ -11,7 +11,7 @@ const SlotDialog = ({ open, onClose }) => {
     const fetchSlots = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/api/slots/available', {
+        const response = await axios.get('http://localhost:8000/api/slots/available', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `${token}`
