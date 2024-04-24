@@ -5,7 +5,6 @@ const courtCaseController = require('../Controllers/CourtCasesController');
 const { authenticateRole, ROLES } = require('../Middlewares/authMiddleware');
 
 router.get("/:cin", courtCaseController.getCaseByCIN);
-router.get('/search', courtCaseController.searchCourtCases);
 
 // Ensure only Registrar can access court cases routes
 router.use(authenticateRole([ROLES.REGISTRAR]));
@@ -24,7 +23,6 @@ router.get('/hearing_date/:date', courtCaseController.getCourtCasesForHearingDat
 
 // Retrieve the status of a specific court case identified by CIN
 router.get('/status/:CIN', courtCaseController.getCaseStatus);
-
 
 
 

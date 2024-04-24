@@ -1,9 +1,9 @@
 import React from 'react'
-
+import styles from './dashboard.module.css'
 const dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
+     <div className={styles.heroSection}>
+      <h1>Judgement Information System</h1>
     </div>
   )
 }

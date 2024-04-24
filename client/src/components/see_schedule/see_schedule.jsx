@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './see_schedule.module.css';
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ const SeeSchedule = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  
   const token = JSON.parse(localStorage.getItem('isLoggedIn')).token;
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -24,10 +24,12 @@ const SeeSchedule = () => {
         });
         setCasesData(response.data);
       } catch (err) {
+        setCasesData([]);
         console.error('Error:', err);
       }
     };
 
+   
   const renderCasesTable = () => {
     if (!casesData || casesData.length === 0) {
       return <div>No cases to show</div>;

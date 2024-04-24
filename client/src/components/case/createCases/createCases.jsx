@@ -112,7 +112,7 @@ const CreateCourtCaseForm = () => {
   const handleDialogBoxClose = () => {
     setDialogOpen(false); // Close the dialog
   };
-
+  // console.log(formData);
   return (
     
       <div className={styles.mainContainer}>

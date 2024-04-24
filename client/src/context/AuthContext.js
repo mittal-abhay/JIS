@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
         const user = localStorage.getItem('isLoggedIn');
         if(user){
           const role = JSON.parse(user).role;
-          if (role === 'registrar') navigate('/home');
+          if (role === 'registrar') navigate('/dashboard');
           else if (role === 'judge') navigate('/judges');
           else navigate('/lawyers');
         }

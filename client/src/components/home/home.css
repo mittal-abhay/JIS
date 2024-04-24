@@ -13,9 +13,7 @@
     height: 100%;
 }
 
-.main-box{
-    /* display: flex; */
+ .main-box{
     position: relative;
     top: 5em;
-
-}
+} 

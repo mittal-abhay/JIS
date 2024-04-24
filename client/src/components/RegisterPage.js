@@ -29,7 +29,7 @@ const RegisterPage = () => {
 
     try {
       await register({ username, password, role });
-      navigate('/login');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error:', error);
       setError(error.message);

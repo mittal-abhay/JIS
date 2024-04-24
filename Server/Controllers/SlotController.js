@@ -37,7 +37,7 @@ exports.getNextAvailableSlots = async (req, res) => {
         // Slots on future dates
         { date: { $gt: currentDate } }
       ]
-    }).sort({ date: 1, 'time.startTime': 1 }).limit(15);
+    }).sort({ date: 1, 'time.startTime': 1 }).limit(30);
 
     if (nextAvailableSlots.length === 0) {
       return res.status(404).json({ message: 'No available slots found' });

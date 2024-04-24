@@ -1,7 +1,14 @@
 const CourtCase = require('../Models/CourtCase');
 const Slot = require('../Models/Slot');
+const User = require('../Models/User');
 
-
+const isValidTime = (timeString) => {
+  // Regular expression to match the format h:mm AM/PM
+  const timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/i;
+  
+  // Test if the timeString matches the regular expression
+  return timeRegex.test(timeString);
+};
 
 exports.createCourtCase = async (req, res) => {
   try {
@@ -42,6 +49,48 @@ exports.createCourtCase = async (req, res) => {
     }
 
     // Proceed with creating the court case
+
+    // Check if the judge exists
+    const arrestingDate = new Date(arrest.date);
+    const startDate = new Date(start_date);
+    const crimeDate = new Date(crime.date_committed);
+
+    if(isValidTime(timeline[0].startTime) === false || isValidTime(timeline[0].endTime) === false){
+      return res.status(400).json({ message: 'Invalid time format' });
+    }
+    if (crimeDate > arrestingDate) {
+      return res.status(400).json({ message: 'Crime date cannot be later than the arresting date' });
+    }
+    
+    if (startDate < arrestingDate) {
+      return res.status(400).json({ message: 'Start date cannot be earlier than the arresting date' });
+    }
+
+    // if(!isNaN(crimeDate.getTime())){
+    //   return res.status(400).json({ message: 'Invalid Crime date' });
+    // }
+    
+    // if(isNaN(arrestingDate.getTime())){
+    //   return res.status(400).json({ message: 'Invalid Arresting date' });
+    // }
+    // if(isNaN(startDate.getTime())){
+    //   return res.status(400).json({ message: 'Invalid Start date' });
+    // }
+
+   
+    const judgeExists = await User.findOne
+    ({ username: judge });
+    if (!judgeExists) {
+      return res.status(400).json({ message: 'Judge does not exist' });
+    }
+    // Check if the Lawyer exists
+    const lawyerExists = await User.findOne
+    ({ username: lawyer });
+    if (!lawyerExists) {
+      return res.status(400).json({ message: 'Lawyer does not exist' });
+    }
+    
+
     const ondate = timeline[0].date;
     const start= timeline[0].startTime;
     const end = timeline[0].endTime;
@@ -210,39 +259,14 @@ exports.getCaseStatus = async (req, res) => {
   };
 
 
-// API to search for past court cases by keywords
-exports.searchCourtCases = async (req, res) => {
-  try {
-      console.log('Hi'); // Log query for debugging
-      const { keywords } = req.query;
-      console.log(req.query);
-      console.log('Keywords:', keywords); // Log keywords for debugging
-
-      // Perform search by keywords
-      const courtCases = await CourtCase.find({
-          $or: [
-              { 'defendant.name': { $regex: keywords, $options: 'i' } },
-              { 'crime.type': { $regex: keywords, $options: 'i' } },
-              { 'crime.location': { $regex: keywords, $options: 'i' } },
-              { 'arrest.arresting_officer': { $regex: keywords, $options: 'i' } },
-              { 'judge': { $regex: keywords, $options: 'i' } },
-              { 'prosecutor': { $regex: keywords, $options: 'i' } },
-              { 'lawyer': { $regex: keywords, $options: 'i' } },
-          ]
-      });
-      console.log('Search Result:', courtCases); // Log search result for debugging
-      res.status(200).json(courtCases);
-  } catch (err) {
-      res.status(500).json({ error: err.message });
-  }
-};
-
-
-
+// Record Adjournment API
 exports.recordAdjournment = async (req, res) => {
     try {
         const { newHearingDate, summary, startTime, endTime } = req.body;
         const { cin } = req.params;
+        if(!startTime || !endTime || !newHearingDate || !summary){
+          return res.status(400).json({ message: 'Missing required fields' });
+        }
         const courtCase = await CourtCase.findOne({CIN: cin});
         if (!courtCase) {
           return res.status(404).json({ message: 'Court case not found' });
@@ -305,6 +329,9 @@ exports.recordProceedings = async (req, res) => {
   try {
     const { newHearingDate, summary, startTime, endTime } = req.body;
     const { cin } = req.params;
+    if(!startTime || !endTime || !newHearingDate || !summary){
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
     const courtCase = await CourtCase.findOne({CIN: cin});
     if (!courtCase) {
       return res.status(404).json({ message: 'Court case not found' });

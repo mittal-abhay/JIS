@@ -22,7 +22,7 @@ const LoginPage = () => {
 
     try {
       await login(username, password);
-      navigate('/home');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error:', error);
       setError(error.message);

@@ -31,9 +31,9 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab, setRecordType, record
     <div className={`sidebar-container ${IsClose ? 'collapse' : ''}`}>
       <div className = 'Logo'><b>JIS</b></div>
       <div className="sidebar-content">
-        {/* <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
+        <div className="sidebar-item" onClick={() => handleSubMenuClick('Dashboard')}>
           <IoHome className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/dashboard">Dashboard</Link></span>
-        </div>  */}
+        </div> 
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Case')}>
           <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}>Case</span>
         </div>
@@ -41,9 +41,13 @@ const Sidebar = ({ IsClose, setActiveTab, setActiveSubTab, setRecordType, record
           <div className="sidebar-subitem" onClick = {() => handleSubtabClick('All Cases')}><Link to = "/allCases">All Cases</Link></div>
           <div className="sidebar-subitem" onClick = {() => handleSubtabClick('Create Case')}><Link to="/createCase">Create Case</Link></div>
         </div>
+        <div className="sidebar-item" onClick={() => handleSubMenuClick('See Cases')}>
+        <GoLaw className="sidebar-item-icon" /> <span className = {`${IsClose? 'hide-item-text': ''}`}><Link to="/seeCases">See Cases</Link></span>
+        </div>
         <div className="sidebar-item" onClick={() => handleSubMenuClick('Record Something')}>
           <FaPenClip className="sidebar-item-icon" /><span className = {`${IsClose? 'hide-item-text': ''}`}>Record Something</span>
         </div>
+        
         <div className={`sidebar-submenu ${activeSubMenu === 'Record Something' && !IsClose ? 'show' : ''}`}>
         <div className="sidebar-subitem" onClick={() => { handleSubtabClick('Record Adjournment'); handleRecordType('record_adjournment'); }}>
           <Link to="/record">Record Adjournment</Link>

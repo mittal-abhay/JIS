@@ -59,37 +59,47 @@ const ManageJudges = () => {
   }));
 
   const handleDelete = async (id) => {
-    // Implement delete logic here
-
-    try {
-      const response = await axios.delete(`http://localhost:8000/api/users/${id}`, {
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `${token}`
-        }
-      }
-      )
-      const fetchJudges = async () => {
-        try {
-          const response = await axios.get("http://localhost:8000/api/users/judge", {
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': `${token}`
-            }
+    // Ask for confirmation before deletion
+    const confirmed = window.confirm("Do you want to delete this judge?");
+    
+    // If user confirms deletion, proceed with delete logic
+    if (confirmed) {
+      try {
+        const response = await axios.delete(`http://localhost:8000/api/users/${id}`, {
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
           }
-        );
-          setCasesData(response.data);
-        } catch (error) {
-          console.error("Error fetching cases data:", error);
-        }
-      };
-  
-      fetchJudges();
-      }catch(e){
-        console.log(e);
+        });
+        // Handle deletion success
+        console.log("Judge deleted successfully");
+      } catch (error) {
+        // Handle deletion error
+        console.error("Error deleting judge:", error);
       }
-    // Update the state or perform API call to delete the judge
+    } else {
+      // If user cancels deletion, do nothing
+      console.log("Deletion cancelled by user");
+    }
   };
+  
+
+  useEffect(() => {
+    const fetchJudges = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/users/judge", {
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        }
+      );
+        setCasesData(response.data);
+      } catch (error) {
+        console.error("Error fetching cases data:", error);
+      }
+    }
+    fetchJudges()}, []);
 
   return (
     <Box m="20px">
